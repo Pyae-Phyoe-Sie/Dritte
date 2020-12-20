@@ -28,37 +28,71 @@ $(document).ready(function() {
     });
 
     $('.filter-check-item').change(function() {
-        let property = JSON.parse(localStorage.getItem($('.filter-key').val()));
-        let multiFilter = JSON.parse(localStorage.getItem('multiFilter'));
+        let array = [];
         let checkValue = $(this).val();
-        if (multiFilter == null) {
-            multiFilter = [];
-        }
-        if($(this).is(":checked")) {
-            multiFilter.push(checkValue);
-        } else {
-            multiFilter = $.grep(multiFilter, function(value) {
-                return value != checkValue;
-            });
-        }
+        let checkOrNot = $(this).is(":checked");
+        let keyAndValue = checkValue.split(",");
+        let property = JSON.parse(localStorage.getItem(keyAndValue[2]));
 
-        localStorage.setItem('multiFilter', JSON.stringify(multiFilter));
+        (property.childFilter).forEach(function(childFilter, index) {
+            if (childFilter.name == keyAndValue[1]) {
+                if (childFilter.hasOwnProperty('selectedFilterValue')) {
+                    array = childFilter.selectedFilterValue;
+                } else {
+                    childFilter.selectedFilterValue = [];
+                }
+
+                if(checkOrNot) {
+                    array.push(keyAndValue[0]);
+                } else {
+                    array = $.grep(array, function(value) {
+                        return value != keyAndValue[0];
+                    });
+                }
+                property.childFilter[index].selectedFilterValue = array;
+            }
+        });
+        
+        localStorage.setItem(property.name, JSON.stringify(property));
 
         var filter = new Filter(property);
         filter.action();
     });
 
     $('.filter-radio-item').click(function() {
-        let property = JSON.parse(localStorage.getItem($('.filter-key').val()));
         let checkValue = $(this).val();
+        var keyAndValue = checkValue.split(",");
+        let property = JSON.parse(localStorage.getItem(keyAndValue[2]));
+
+        (property.childFilter).forEach(function(childFilter) {
+            if (childFilter.name == keyAndValue[1]) {
+                childFilter.selectedFilterValue = keyAndValue[0];
+            }
+        });
+
+        localStorage.setItem(property.name, JSON.stringify(property));
+
         var filter = new Filter(property);
-        filter.action(checkValue);
+        filter.action();
     });
 
+    //this code executes when the keypress event occurs.
     $(".filter-text-item").keypress(function(e){
-        let property = JSON.parse(localStorage.getItem($('.filter-key').val()));
-        let attr = property.child_attr;
+        let filterName = $(this).attr('id');
+        let propertyName = $('.'+filterName).val();
+        let property = JSON.parse(localStorage.getItem(propertyName));
+        let attr;
         let value = $(this).val()+e.key;
+
+        (property.childFilter).forEach(function(childFilter) {
+            if (childFilter.name == filterName) {
+                childFilter.selectedFilterValue = value;
+                attr = childFilter.child_attr;
+            }
+        });
+
+        localStorage.setItem(property.name, JSON.stringify(property));
+        
         let suggest = [];
 
         $(property.parent+' '+property.child).each(function() {
@@ -70,35 +104,45 @@ $(document).ready(function() {
             }
         });
 
-        addsuggest(suggest);
+        addsuggest(suggest, filterName, propertyName);
         
         var filter = new Filter(property);
-        filter.action(value);
-        //this code executes when the keypress event occurs.
+        filter.action();
     });
 
     $(".filter-text-item").keydown(function(e){
         if (e.key == "Backspace") {
-            let value = ($(this).val()).slice(0, -1);
-            let property = JSON.parse(localStorage.getItem($('.filter-key').val()));
-            let attr = property.child_attr;
-            let suggest = [];
+            e.preventDefault();
+            // let filterName = $(this).attr('id');
+            // let propertyName = $('.'+filterName).val();
+            // let property = JSON.parse(localStorage.getItem(propertyName));
+            // let attr;
+            // let value = ($(this).val()).slice(0, -1);
 
-            if (value != '') {
-                $(property.parent+' '+property.child).each(function() {
-                    if($(this).attr(attr).includes(value)) {
-                        if (suggest.includes($(this).attr(attr))) {
-                        } else {
-                            suggest.push($(this).attr(attr))
-                        }
-                    }
-                });
-            }
-    
-            addsuggest(suggest);
+            // (property.childFilter).forEach(function(childFilter) {
+            //     if (childFilter.name == filterName) {
+            //         childFilter.selectedFilterValue = value;
+            //         attr = childFilter.child_attr;
+            //     }
+            // });
 
-            var filter = new Filter(property);
-            filter.action(value);
+            // localStorage.setItem(property.name, JSON.stringify(property));
+            
+            // let suggest = [];
+
+            // $(property.parent+' '+property.child).each(function() {
+            //     if($(this).attr(attr).includes(value)) {
+            //         if (suggest.includes($(this).attr(attr))) {
+            //         } else {
+            //             suggest.push($(this).attr(attr))
+            //         }
+            //     }
+            // });
+
+            // addsuggest(suggest, filterName, propertyName);
+
+            // var filter = new Filter(property);
+            // filter.action();
         }
     });
 
@@ -110,7 +154,7 @@ $(document).ready(function() {
 });
 
 // for text box filter
-function addsuggest(suggest) {
+function addsuggest(suggest, filterName, propertyName) {
     $('.filter-suggest').show();
     $('.filter-suggest p').remove();
     if ($('.filter-suggest p').length == 0) {
@@ -119,17 +163,28 @@ function addsuggest(suggest) {
         $('.filter-suggest').css('border', '1px solid #c1c1c1');
     }
     suggest.forEach(element => 
-        $('.filter-suggest').append("<p style='margin: 0px;padding: 3px 7px;' onclick='selectSuggest(`"+element+"`)'>"+element+"</p>")
+        $('.filter-suggest').append("<p style='margin: 0px;padding: 3px 7px;' onclick='selectSuggest(`"+element+','+filterName+','+propertyName+"`)'>"+element+"</p>")
     );
 }
 
 // for text box filter
 function selectSuggest(value) {
+    var keyAndValue = value.split(",");
+    console.log(keyAndValue)
     $('.filter-suggest p').remove();
-    $('.filter-check input').val(value);
-    let property = JSON.parse(localStorage.getItem($('.filter-key').val()));
+    $('.filter-check input[type=text]').val(keyAndValue[0]);
+    let property = JSON.parse(localStorage.getItem(keyAndValue[2]));
+
+    (property.childFilter).forEach(function(childFilter) {
+        if (childFilter.name == keyAndValue[1]) {
+            childFilter.selectedFilterValue = keyAndValue[0];
+        }
+    });
+
+    localStorage.setItem(property.name, JSON.stringify(property));
+
     var filter = new Filter(property);
-    filter.action(value);
+    filter.action();
 }
 
 function dritte(items) {
@@ -223,37 +278,52 @@ function showClickPage(page, key) {
 }
 
 function selectFilter(key) {
-    let property = JSON.parse(localStorage.getItem(key));
+    let id = key.replace(",", "-");
+    let checkValue = $('#'+id).val();
+    let keyAndValue = key.split(",");
+    let property = JSON.parse(localStorage.getItem(keyAndValue[1]));
+    
+    (property.childFilter).forEach(function(childFilter, index) {
+        if (childFilter.name == keyAndValue[0]) {
+            childFilter.selectedFilterValue = checkValue;
+        }
+    });
+
+    localStorage.setItem(property.name, JSON.stringify(property));
+    // console.log(property);
+    
     var filter = new Filter(property);
-    filter.action($('#'+key).val());
+    filter.action();
 }
 
 function checkforInfiniteScroll() {
     if ($('.paginate-scroll').length > 0) {
-        let property = JSON.parse(localStorage.getItem($('#scroll-property').val()));
+        if (parseInt($('#active-page').val()) == parseInt($('#total-page').val())) {
+            let property = JSON.parse(localStorage.getItem($('#scroll-property').val()));
 
-        // for infinite scroll
-        if (isElementTopInView($('.paginate-scroll'))) {
-            if ($('#scroll-able').val() == "scroll") {
-                $('#scroll-able').val('progress');
-                page = parseInt($('#active-page').val()) + 1;
-                $('#active-page').val(page);
-                
-                var paginate = new Paginate(property);
-    
-                $('#loading').show();
-                setTimeout(function(){
-                    let result = paginate.showPage(page);
-                    if (result) {
-                        $('#scroll-able').val('scroll');
-                    }
-                    $('#loading').hide();
-                    if (parseInt($('#total-page').val()) == page) {
-                        $('#scroll-able').val('end');
-                        $('#'+property.name).remove();
-                        // $('#loading').remove();
-                    }
-                }, 500);
+            // for infinite scroll
+            if (isElementTopInView($('.paginate-scroll'))) {
+                if ($('#scroll-able').val() == "scroll") {
+                    $('#scroll-able').val('progress');
+                    page = parseInt($('#active-page').val()) + 1;
+                    $('#active-page').val(page);
+                    
+                    var paginate = new Paginate(property);
+        
+                    $('#loading').show();
+                    setTimeout(function(){
+                        let result = paginate.showPage(page);
+                        if (result) {
+                            $('#scroll-able').val('scroll');
+                        }
+                        $('#loading').hide();
+                        if (parseInt($('#total-page').val()) == page) {
+                            $('#scroll-able').val('end');
+                            $('#'+property.name).remove();
+                            // $('#loading').remove();
+                        }
+                    }, 500);
+                }
             }
         }
     }
@@ -318,7 +388,6 @@ class Paginate {
         } else {
             this.property.per_page = 10;
         }
-
         localStorage.setItem(this.property.name, JSON.stringify(property));
     }
 
@@ -326,105 +395,81 @@ class Paginate {
         let self = this;
         let property = this.property;
 
-        // if (this.property.type.type != 'page') {
-            if(property.type.hasOwnProperty('animate')){
-                // $(property.child).removeClass('in-view '+property.type.animate);
-                // $(property.child).addClass('not-view '+property.type.animate);
-                if (property.type.animate == 'fade-in') {
-                    $( "<style>.not-view.fade-in { opacity: 0; transition: opacity 1s ease; } .in-view.fade-in { opacity: 1;transition: opacity 1s ease; }</style>" ).appendTo( "head" );
-                } else if (property.type.animate == 'slide-up') {
-                    $(property.parent+' '+property.child).each(function() {
-                        if ($(this).parent('.dritte-animate-container').length == 0) {
-                            $(this).wrap( "<div class='dritte-animate-container'></div>" );
-                        }
-                    });
-                    // $(property.parent+' .dritte-animate-container').hide();
-                    let minHeight;
-                    if(property.type.hasOwnProperty('animate')){
-                        minHeight = property.type.childDefaultHeight;
-                    } else {
-                        minHeight = '100px';
+        if(property.type.hasOwnProperty('animate')){
+            if (property.type.animate == 'fade-in') {
+                $( "<style>.not-view.fade-in { opacity: 0; transition: opacity 1s ease; } .in-view.fade-in { opacity: 1;transition: opacity 1s ease; }</style>" ).appendTo( "head" );
+            } else if (property.type.animate == 'slide-up') {
+                $(property.parent+' '+property.child).each(function() {
+                    if ($(this).parent('.dritte-animate-container').length == 0) {
+                        $(this).wrap( "<div class='dritte-animate-container'></div>" );
                     }
-                    $( "<style>.dritte-animate-container { min-height: "+minHeight+"; position: relative; } .not-view.slide-up { opacity: 0; top: 150px; position: absolute; transition: top 1s ease, opacity 1s ease, position 1s ease; } .in-view.slide-up { opacity: 1; top: 0px; position: relative; transition: top 1s ease, opacity 1s ease, position 1s ease; }</style>" ).appendTo( "head" );
-                } else if (property.type.animate == 'y-flip') {
-                    $( "<style>.not-view.y-flip { transform: rotateY(270deg);transition: transform 1s ease; } .in-view.y-flip { transform: rotateY(360deg);transition: transform 1s ease; }</style>" ).appendTo( "head" );
-                } else if (property.type.animate == 'x-flip') {
-                    $( "<style>.not-view.x-flip { transform: rotateX(270deg);transition: transform 1s ease; } .in-view.x-flip { transform: rotateX(360deg);transition: transform 1s ease; }</style>" ).appendTo( "head" );
-                } else if (property.type.animate == 'slide-left') {
-                    $(property.parent+' '+property.child).each(function() {
-                        if ($(this).parent('.dritte-animate-container').length == 0) {
-                            $(this).wrap( "<div class='dritte-animate-container'></div>" );
-                        }
-                    });
-                    // $(property.parent+' .dritte-animate-container').hide();
-                    let minHeight;
-                    if(property.type.hasOwnProperty('animate')){
-                        minHeight = property.type.childDefaultHeight;
-                    } else {
-                        minHeight = '100px';
-                    }
-                    $( "<style>.dritte-animate-container { min-height: "+minHeight+"; position: relative; } .not-view.slide-left { right: 100%; position: absolute; transition: right 1s ease, position 1s ease; } .in-view.slide-left { right: 0px; position: relative; transition: right 1s ease, position 1s ease; }</style>" ).appendTo( "head" );
-                } else if (property.type.animate == 'slide-right') {
-                    $(property.parent+' '+property.child).each(function() {
-                        if ($(this).parent('.dritte-animate-container').length == 0) {
-                            $(this).wrap( "<div class='dritte-animate-container'></div>" );
-                        }
-                    });
-                    // $(property.parent+' .dritte-animate-container').hide();
-                    let minHeight;
-                    if(property.type.hasOwnProperty('animate')){
-                        minHeight = property.type.childDefaultHeight;
-                    } else {
-                        minHeight = '100px';
-                    }
-                    $( "<style>.dritte-animate-container { min-height: "+minHeight+"; position: relative; } .not-view.slide-right { left: 100%; position: absolute; transition: left 1s ease, position 1s ease; } .in-view.slide-right { left: 0px; position: relative; transition: left 1s ease, position 1s ease; }</style>" ).appendTo( "head" );
-                } else if ( 'bounce-in') {
-                    $( "<style>.not-view.bounce-in { transform: scale(0); transition: transform 1s ease; } .in-view.bounce-in { transform: scale(1);transition: transform 1s ease; }</style>" ).appendTo( "head" );
+                });
+                // $(property.parent+' .dritte-animate-container').hide();
+                let minHeight;
+                if(property.type.hasOwnProperty('animate')){
+                    minHeight = property.type.childDefaultHeight;
+                } else {
+                    minHeight = '100px';
                 }
+                $( "<style>.dritte-animate-container { min-height: "+minHeight+"; position: relative; } .not-view.slide-up { opacity: 0; top: 150px; position: absolute; transition: top 1s ease, opacity 1s ease, position 1s ease; } .in-view.slide-up { opacity: 1; top: 0px; position: relative; transition: top 1s ease, opacity 1s ease, position 1s ease; }</style>" ).appendTo( "head" );
+            } else if (property.type.animate == 'y-flip') {
+                $( "<style>.not-view.y-flip { transform: rotateY(270deg);transition: transform 1s ease; } .in-view.y-flip { transform: rotateY(360deg);transition: transform 1s ease; }</style>" ).appendTo( "head" );
+            } else if (property.type.animate == 'x-flip') {
+                $( "<style>.not-view.x-flip { transform: rotateX(270deg);transition: transform 1s ease; } .in-view.x-flip { transform: rotateX(360deg);transition: transform 1s ease; }</style>" ).appendTo( "head" );
+            } else if (property.type.animate == 'slide-left') {
+                $(property.parent+' '+property.child).each(function() {
+                    if ($(this).parent('.dritte-animate-container').length == 0) {
+                        $(this).wrap( "<div class='dritte-animate-container'></div>" );
+                    }
+                });
+                let minHeight;
+                if(property.type.hasOwnProperty('animate')){
+                    minHeight = property.type.childDefaultHeight;
+                } else {
+                    minHeight = '100px';
+                }
+                $( "<style>.dritte-animate-container { min-height: "+minHeight+"; position: relative; } .not-view.slide-left { right: 100%; position: absolute; transition: right 1s ease, position 1s ease; } .in-view.slide-left { right: 0px; position: relative; transition: right 1s ease, position 1s ease; }</style>" ).appendTo( "head" );
+            } else if (property.type.animate == 'slide-right') {
+                $(property.parent+' '+property.child).each(function() {
+                    if ($(this).parent('.dritte-animate-container').length == 0) {
+                        $(this).wrap( "<div class='dritte-animate-container'></div>" );
+                    }
+                });
+                let minHeight;
+                if(property.type.hasOwnProperty('animate')){
+                    minHeight = property.type.childDefaultHeight;
+                } else {
+                    minHeight = '100px';
+                }
+                $( "<style>.dritte-animate-container { min-height: "+minHeight+"; position: relative; } .not-view.slide-right { left: 100%; position: absolute; transition: left 1s ease, position 1s ease; } .in-view.slide-right { left: 0px; position: relative; transition: left 1s ease, position 1s ease; }</style>" ).appendTo( "head" );
+            } else if ( 'bounce-in') {
+                $( "<style>.not-view.bounce-in { transform: scale(0); transition: transform 1s ease; } .in-view.bounce-in { transform: scale(1);transition: transform 1s ease; }</style>" ).appendTo( "head" );
             }
-        // }
-        // let delay = 0;
-
-        // if (property.type == 'page') {
-        //     delay = 1000;
-        // }
-
-        // setTimeout(function() {
-        //     $(property.parent+' '+property.child).hide();
-        // }, delay);
+        }
         
-        var paginateItems;
+        let paginateItems;
+        let showList;
 
-        if (JSON.parse(localStorage.getItem('showIndex')) === null) {
+        if (property.hasOwnProperty('showIndex')) {
+            showList = JSON.parse(localStorage.getItem(property.showIndex));
+        } else {
+            showList = JSON.parse(localStorage.getItem('showIndex'));
+        }
+
+        if (showList === null) {
             let showIndex = [];
             let propertyType = property.type;
 
             $(this.property.parent+' '+this.property.child).each(function() {
-                // $(this).show();
                 if ($(this).parent('.dritte-animate-container').length > 0) {
                     showIndex.push($(this).parent('.dritte-animate-container').index());
                 } else {
                     showIndex.push($(this).index());
                 }
-
-                // if (propertyType.type != 'page') {
-                //     if(propertyType.hasOwnpropertyType('animate')){
-                //         if (propertyType.animate == 'slide-up' || propertyType.animate == 'slide-left' || propertyType.animate == 'slide-right') {
-                //             showIndex.push($(this).parent('.dritte-animate-container').index());
-                //         } else {
-                //             showIndex.push($(this).index());
-                //         }
-                //     } else {
-                //         showIndex.push($(this).index());
-                //     }
-                // } else {
-                //     showIndex.push($(this).index());
-                // }
             });
             localStorage.setItem('showIndex', JSON.stringify(showIndex));
             paginateItems = showIndex.length;
         } else {
-            let showList = JSON.parse(localStorage.getItem('showIndex'));
             paginateItems = showList.length;
         }
         var pages = Math.ceil(paginateItems/property.per_page);
@@ -509,8 +554,15 @@ class Paginate {
 
         let start = (page - 1)*(property.per_page) + 1;
         let end = (page)*(property.per_page);
+        let showList;
 
-        let showList = JSON.parse(localStorage.getItem('showIndex'));
+        if (property.hasOwnProperty('showIndex')) {
+            console.log('filter index')
+            showList = JSON.parse(localStorage.getItem(property.showIndex));
+        } else {
+            console.log('default index')
+            showList = JSON.parse(localStorage.getItem('showIndex'));
+        }
         let delay = 0;
 
         if ( (property.type.type == 'infinite-button' && page > 1) ||
@@ -574,20 +626,34 @@ class Filter {
 
     constructor(property){
         this.property = property;
-        localStorage.setItem(this.property.name, JSON.stringify(property));
+        localStorage.setItem(this.property.name, JSON.stringify(this.property));
     }
 
     mainFilter() {
         let self = this;
-        self.addFilter();
+        self.checkFilterType();
     }
 
-    addFilter() {
+    checkFilterType() {
+        let self = this;
+        if(this.property.hasOwnProperty('childFilter')){
+            // console.log(this.property.multifilter)
+            (this.property.childFilter).forEach(function(value) {
+                self.addFilter(value);
+            });
+        } else {
+            self.addFilter(this.property);
+            // console.log(this.property)
+        }
+    }
+
+    addFilter(obj) {
+        let property = this.property;
         var child = '';
-        if(this.property.hasOwnProperty('value')){
+        if(obj.hasOwnProperty('value')){
             
         } else {
-            let attr = this.property.child_attr;
+            let attr = obj.child_attr;
             let array = [];
             $(this.property.parent+' '+this.property.child).each(function() {
                 if(array.includes($(this).attr(attr))){
@@ -595,183 +661,111 @@ class Filter {
                 array.push($(this).attr(attr));
                 }
             });
-            this.property.value = array;
+            obj.value = array;
         }
 
-        switch(this.property.type) {
+        switch(obj.type) {
             case 'select':
                 child += '<option value="">default</option>';
-                this.property.value.forEach(element => {
+                obj.value.forEach(element => {
                     child += '<option value='+element+'>'+element+'</option>';
                 });
-                $(this.property.parent).prepend('<select id="'+this.property.name+'" onchange="selectFilter(`'+this.property.name+'`)">'+child+'</select>');
+                $(this.property.parent).prepend('<select id="'+obj.name+'-'+this.property.name+'" onchange="selectFilter(`'+obj.name+','+this.property.name+'`)">'+child+'</select>');
                 break;
             case 'check':
-                child += '<input type="hidden" class="filter-key" value="'+this.property.name+'"/>';
+                // child += '<input type="hidden" class="filter-key" value="'+this.property.name+'"/>';
                 child += '<ul class="filter-check">';
-                this.property.value.forEach(element => {
-                    child += '<li><input type="checkbox" id="'+element+'" class="filter-check-item" value="'+element+'"/><label for="'+element+'">'+element+'</label></li>';
+                obj.value.forEach(element => {
+                    child += '<li><input type="checkbox" id="'+element+'" class="filter-check-item" value="'+element+','+obj.name+','+property.name+'"/><label for="'+element+'">'+element+'</label></li>';
                     // child += '<input type="checkbox" class="filter-check-item" value="'+element+'"/><span>'+element+'</span>';
                 });
                 child += '</ul>';
                 $(this.property.parent).prepend(child);
                 break;
             case 'radio':
-                child += '<input type="hidden" class="filter-key" value="'+this.property.name+'"/>';
+                // child += '<input type="hidden" class="filter-key" value="'+this.property.name+'"/>';
                 child += '<ul class="filter-check">';
-                this.property.value.forEach(element => {
-                    child += '<li><input type="radio" id="'+element+'" class="filter-radio-item" name="'+this.property.name+'" value="'+element+'"/><label for="'+element+'">'+element+'</label></li>';
+                obj.value.forEach(element => {
+                    child += '<li><input type="radio" id="'+element+'" class="filter-radio-item" name="'+this.property.name+'" value="'+element+','+obj.name+','+property.name+'"/><label for="'+element+'">'+element+'</label></li>';
                     // child += '<input type="radio" class="filter-radio-item" name="'+this.property.name+'" value="'+element+'"/> '+element;
                 });
                 child += '</ul>';
                 $(this.property.parent).prepend(child);
                 break;
             case 'type':
-                child += '<input type="hidden" class="filter-key" value="'+this.property.name+'"/>';
-                child += '<div class="filter-check"><input type="text" class="filter-text-item" />';
+                child += '<div class="filter-check"><input type="text" class="filter-text-item" id="'+obj.name+'" />';
+                child += '<input type="hidden" class="'+obj.name+'" value="'+property.name+'"/>';
                 child += '<div class="filter-suggest" style="position: absolute;z-index: 1;background-color: #fff; border: 1px solid #c1c1c1;border-radius: 5px;"></div>';
                 child += '</div>';
                 $(this.property.parent).prepend(child);
         }
     }
 
-    action(value = null) {
-        // let self = this;
-        let attr = this.property.child_attr;
+    action() {
         let filterProperty = this.property;
-        let showIndex = [];
-
-        if (value == null) {
-            value = JSON.parse(localStorage.getItem('multiFilter'));
-            if (value.length == 0) {
-                // self.createShowIndex('normal', value);
-                $(this.property.parent+' '+this.property.child).each(function() {
-                    // $(this).show();
-                    if (filterProperty.hasOwnProperty('paginate')) {
-                        // let paginateProperty = JSON.parse(localStorage.getItem(filterProperty.paginate));
-
-                        if ($(this).parent('.dritte-animate-container').length > 0) {
-                            showIndex.push($(this).parent('.dritte-animate-container').index());
-                        } else {
-                            showIndex.push($(this).index());
-                        }
-                        // if (paginateProperty.type.type != 'page') {
-                        //     if(paginateProperty.type.hasOwnProperty('animate')){
-                        //         if (paginateProperty.type.animate == 'slide-up' || paginateProperty.type.animate == 'slide-left' || paginateProperty.type.animate == 'slide-right') {
-                        //             showIndex.push($(this).parent('.dritte-animate-container').index());
-                        //         } else {
-                        //             showIndex.push($(this).index());
-                        //         }
-                        //     } else {
-                        //         showIndex.push($(this).index());
-                        //     }
-                        // } else {
-                        //     showIndex.push($(this).index());
-                        // }
-                    } else {
-                        showIndex.push($(this).index());
-                    }
-                });
-            } else {
-                // self.createShowIndex('attr', value);
-                $(this.property.parent+' '+this.property.child).each(function() {
-                    if(value.includes($(this).attr(attr))) {
-                        // $(this).show();
-                        if (filterProperty.hasOwnProperty('paginate')) {
-                            if ($(this).parent('.dritte-animate-container').length > 0) {
-                                showIndex.push($(this).parent('.dritte-animate-container').index());
+        let showElement = [];
+        
+        (filterProperty.childFilter).forEach(function(filter) {
+            if (filter.hasOwnProperty('selectedFilterValue')) {
+                let filterValue = filter.selectedFilterValue;
+                if (showElement.length == 0) {
+                    $(filterProperty.parent+' '+filterProperty.child).each(function() {
+                        if (filter.type == 'type') {
+                            if (filterValue != '') {
+                                if($(this).attr(filter.child_attr).includes(filterValue)) {
+                                    showElement.push($(this));
+                                }
                             } else {
-                                showIndex.push($(this).index());
+                                showElement.push($(this));
                             }
-                            // let paginateProperty = JSON.parse(localStorage.getItem(filterProperty.paginate));
-                            // if (paginateProperty.type.type != 'page') {
-                            //     if(paginateProperty.type.hasOwnProperty('animate')){
-                            //         if (paginateProperty.type.animate == 'slide-up' || paginateProperty.type.animate == 'slide-left'|| paginateProperty.type.animate == 'slide-right') {
-                            //             console.log('here');
-                            //             showIndex.push($(this).parent('.dritte-animate-container').index());
-                            //         } else {
-                            //             showIndex.push($(this).index());
-                            //         }
-                            //     } else {
-                            //         showIndex.push($(this).index());
-                            //     }
-                            // } else {
-                            //     showIndex.push($(this).index());
-                            // }
-                        } else {
-                            showIndex.push($(this).index());
+                        } else if (filter.type == 'radio') {
+                            if(filterValue.includes($(this).attr(filter.child_attr))) {
+                                showElement.push($(this));
+                            }
+                        } else if (filter.type == 'check') {
+                            if(filterValue.includes($(this).attr(filter.child_attr))) {
+                                showElement.push($(this));
+                            }
                         }
-                    }
-                });
-            }
-        } else
-        if (value == "") {
-            // self.createShowIndex('normal', value);
-            $(this.property.parent+' '+this.property.child).each(function() {
-                // $(this).show();
-                if (filterProperty.hasOwnProperty('paginate')) {
-                    if ($(this).parent('.dritte-animate-container').length > 0) {
-                        showIndex.push($(this).parent('.dritte-animate-container').index());
-                    } else {
-                        showIndex.push($(this).index());
-                    }
-                        // let paginateProperty = JSON.parse(localStorage.getItem(filterProperty.paginate));
-                        // if (paginateProperty.type.type != 'page') {
-                        //     if(paginateProperty.type.hasOwnProperty('animate')){
-                        //         if (paginateProperty.type.animate == 'slide-up' || paginateProperty.type.animate == 'slide-left' || paginateProperty.type.animate == 'slide-right') {
-                        //             // console.log('here');
-                        //             showIndex.push($(this).parent('.dritte-animate-container').index());
-                        //         } else {
-                        //             showIndex.push($(this).index());
-                        //         }
-                        //     } else {
-                        //         showIndex.push($(this).index());
-                        //     }
-                        // } else {
-                        //     showIndex.push($(this).index());
-                        // }
+                    });
                 } else {
-                    showIndex.push($(this).index());
-                }
-            });
-        } else {
-            // $(this.property.parent+' '+this.property.child).hide();
-            $(this.property.parent+' '+this.property.child).each(function() {
-                // if($(this).attr(attr) == value) {
-                if ($(this).attr(attr).includes(value)) {
-                    // $(this).show();
-                    if (filterProperty.hasOwnProperty('paginate')) {
-                        if ($(this).parent('.dritte-animate-container').length > 0) {
-                            showIndex.push($(this).parent('.dritte-animate-container').index());
-                        } else {
-                            showIndex.push($(this).index());
+                    showElement = jQuery.grep(showElement, function(value) {
+                        // return value != removeItem;
+                        if (filter.type == 'type') {
+                            if (filterValue != '') {
+                                if(value.attr(filter.child_attr).includes(filterValue)) {
+                                    return value;
+                                }
+                            } else {
+                                return value;
+                            }
+                        } else if (filter.type == 'radio') {
+                            if(filterValue.includes(value.attr(filter.child_attr))) {
+                                return value;
+                            }
+                        } else if (filter.type == 'check') {
+                            if(filterValue.includes(value.attr(filter.child_attr))) {
+                                return value;
+                            }
                         }
-                        // let paginateProperty = JSON.parse(localStorage.getItem(filterProperty.paginate));
-                        // if (paginateProperty.type.type != 'page') {
-                        //     if(paginateProperty.type.hasOwnProperty('animate')){
-                        //         if (paginateProperty.type.animate == 'slide-up' || paginateProperty.type.animate == 'slide-left' || paginateProperty.type.animate == 'slide-right') {
-                        //             console.log('here');
-                        //             showIndex.push($(this).parent('.dritte-animate-container').index());
-                        //         } else {
-                        //             showIndex.push($(this).index());
-                        //         }
-                        //     } else {
-                        //         showIndex.push($(this).index());
-                        //     }
-                        // } else {
-                        //     showIndex.push($(this).index());
-                        // }
-                    } else {
-                        showIndex.push($(this).index());
-                    }
+                    });
                 }
-            });
-        }
+            }
+        });
 
-        localStorage.setItem('showIndex', JSON.stringify(showIndex));
+        let showIndex = [];
+        showElement.forEach(function(el) {
+            showIndex.push(el.index());
+            console.log(el.index() + ' - ' + el.attr('dritte-filter-color') + ' - ' + el.attr('dritte-filter-data'));
+        });
+
+        localStorage.setItem(this.property.name+'-showIndex', JSON.stringify(showIndex));
 
         if(this.property.hasOwnProperty('paginate')){
             let paginateProperty = JSON.parse(localStorage.getItem(this.property.paginate));
+            paginateProperty.parent = this.property.parent;
+            paginateProperty.child = this.property.child;
+            paginateProperty.showIndex = this.property.name+'-showIndex';
             var paginate = new Paginate(paginateProperty);
             paginate.mainPaginate();
         }
