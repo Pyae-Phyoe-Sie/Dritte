@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="home.css">
+        <link rel="stylesheet" href="../style.css">
+        <script src="../jquery.js"></script>
+        <script src="../dritte.js"></script>
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <div class="page">
+
+            <!-- default panel -->
+            <div class="panel">
+                <div class="container">
+                    <!-- menu -->
+                    <div class="header-menu">
+                        <div class="logo">
+                            <img src="./images/Bitmap.png">
+                            <span>INSIGHTS BANK</span>
+                        </div>
+                        <div class="menu">
+                            <a href="#">Contact</a>
+                        </div>
+                    </div>
+                    <!-- end menu -->
+
+                    <!-- filter form -->
+                    <div class="filter-form">
+                        <h1 class="title">DBS Insights Bank</h1>
+                        <p class="secondary-title">Curated insights from across CBG, MOT and FOW by the UX & Research team</p>
+                        <div class="search-box">
+                            <img src="./images/search.png" class="search-icon" />
+                            <input type="text" class="filter-text" placeholder="Search Insights by keywords, tags, country" />
+                            <img src="./images/cross.png" class="cross-icon" />
+                        </div>
+                        <img src="./images/hero_Mesa de trabajo 2.svg" class="banner" />
+                        <div class="filter-sub-menu">
+                            <div class="sub-menu-item all">All</div>
+                            <div class="sub-menu-item cbg active">CBG</div>
+                            <div class="sub-menu-item ibg">IBG</div>
+                            <div class="sub-menu-item mot">MOT</div>
+                            <div class="sub-menu-item fow">FOW</div>
+                        </div>
+                    </div>
+                    <!-- end filter form -->
+                </div>
+            </div>
+            <!-- default panel end -->
+
+            <!-- sticky panel -->
+            <div class="sticky-panel">
+                <div class="sticky-bar">
+                    <div class="container">
+                        <div class="header-menu">
+                            <div class="flex-div">
+                                <div class="logo">
+                                    <img src="./images/Bitmap.png">
+                                    <span>INSIGHTS BANK</span>
+                                </div>
+
+                                <div class="search-box">
+                                    <img src="./images/search.png" class="search-icon" />
+                                    <input type="text" class="filter-text" placeholder="wealth Singapore" />
+                                    <img src="./images/cross.png" class="cross-icon" />
+                                </div>
+
+                                <div class="setting-icon">
+                                    <img src="./images/setting.png" onClick="showStickyFilter()" />
+                                </div>
+                            </div>
+
+                            <div class="menu">
+                                <a href="#">Contact</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sticky-filter border-bottom">
+                        <div class="container">
+                            <div class="filter-sub-menu">
+                                <div class="sub-menu-item all">All</div>
+                                <div class="sub-menu-item cbg active">CBG</div>
+                                <div class="sub-menu-item ibg">IBG</div>
+                                <div class="sub-menu-item mot">MOT</div>
+                                <div class="sub-menu-item fow">FOW</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sticky-filter">
+                        <div class="container">
+                            <div class="multifilter">
+                                <ul class="filter-container">
+                                    <li><input type="checkbox" class="payments" id="sticky-payments" value="Payments"><label for="sticky-payments">Payments</label></li>
+                                    <li><input type="checkbox" class="insurance" id="sticky-insurance" value="Insurance"><label for="sticky-insurance">Insurance</label></li>
+                                    <li><input type="checkbox" class="financial-planning" id="sticky-financial-planning" value="Financial Planning"><label for="sticky-financial-planning">Financial Planning</label></li>
+                                    <li><input type="checkbox" class="wealth" id="sticky-wealth" value="Wealth"><label for="sticky-wealth">Wealth</label></li>
+                                    <li><input type="checkbox" class="applications" id="sticky-applications" value="Applications"><label for="sticky-applications">Applications</label></li>
+                                    <li><input type="checkbox" class="deposits" id="sticky-deposits" value="Deposits"><label for="sticky-deposits">Deposits</label></li>
+                                    <li><input type="checkbox" class="loans" id="sticky-loans" value="Loans"><label for="sticky-loans">Loans</label></li>
+                                    <li><input type="checkbox" class="general-user-needs" id="sticky-general-user-needs" value="General User Needs"><label for="sticky-general-user-needs">General User Needs</label></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- sticky panel end -->
+
+            <!-- data -->
+            <div class="data">
+                <div class="container">
+                    <div class="multifilter">
+                        <!-- <ul class="filter-container">
+                            <li><input type="checkbox" class="payments" id="payments" value="Payments"><label for="payments">Payments</label></li>
+                            <li><input type="checkbox" class="insurance" id="insurance" value="Insurance"><label for="insurance">Insurance</label></li>
+                            <li><input type="checkbox" class="financial-planning" id="financial-planning" value="Financial Planning"><label for="financial-planning">Financial Planning</label></li>
+                            <li><input type="checkbox" class="wealth" id="wealth" value="Wealth"><label for="wealth">Wealth</label></li>
+                            <li><input type="checkbox" class="applications" id="applications" value="Applications"><label for="applications">Applications</label></li>
+                            <li><input type="checkbox" class="deposits" id="deposits" value="Deposits"><label for="deposits">Deposits</label></li>
+                            <li><input type="checkbox" class="loans" id="loans" value="Loans"><label for="loans">Loans</label></li>
+                            <li><input type="checkbox" class="general-user-needs" id="general-user-needs" value="General User Needs"><label for="general-user-needs">General User Needs</label></li>
+                        </ul> -->
+                    </div>
+
+                    <div class="search-list-container">
+                        <div class="list-header">
+                            <div class="total">
+                                <span>298 Insights</span>
+                            </div>
+                            <div class="order-by">
+                                <img src="images/order-by.png" class="up-down-arrow" />
+                                <span>Date Added</span>
+                            </div>
+                        </div>
+                        <div class="search-list">
+
+                            <!-- card -->
+                            <div class="card-container not-view" dritte-filter-data="Singapore">
+                                <div class="card card-1 hover-able">
+                                    <div class="stable">
+                                        <div class="card-logo">
+                                            <img src="images/Bitmap.png" />
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="paragraph">
+                                                <p>RMs want to be able to edit client information and converse with the client at the same time, in order to be more efficient at this stage of the wealth advisory process.</p>
+                                                <div>
+                                                    <p>Singapore</p>
+                                                    <span>Nov 10</span>
+                                                </div>
+                                            </div>
+                                            <div class="category">
+                                                <span>Digibank</span>
+                                                <span>Concept Testing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="foldable">
+                                        <p class="title">Research Objective</p>
+                                        <p class="desc">How do RMs respond to the new YFP concept?</p>
+                                        <p class="title">Background</p>
+                                        <p class="desc">DBS Wealth Team is revamping their current financial planning tool called YFP (Your Financial Planner). The aim is to improve the overall conversational flow, integrate SALOR and update the design to the latest DLS. This is expected to see an improvement in feedback from RMs/WPMs who use this tool.</p>
+                                        <a href="#"><img src="./images/goto.png" />Access Report</a>
+                                    </div>
+
+                                    <img class="down-arrow" onclick="cardExpend('1')" src="images/down-arrow.png" />
+                                    <img class="up-arrow" onclick="cardCollapse('1')" src="images/up-arrow.png" />
+                                </div>
+                            </div>
+                            <!-- card end -->
+
+                            <!-- card -->
+                            <div class="card-container not-view" dritte-filter-data="Malaysia">
+                                <div class="card card-2 hover-able">
+                                    <div class="stable">
+                                        <div class="card-logo">
+                                            <img src="images/Bitmap.png" />
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="paragraph">
+                                                <p>RMs want to be able to edit client information and converse with the client at the same time, in order to be more efficient at this stage of the wealth advisory process.</p>
+                                                <div>
+                                                    <p>Malaysia</p>
+                                                    <span>Nov 10</span>
+                                                </div>
+                                            </div>
+                                            <div class="category">
+                                                <span>Digibank</span>
+                                                <span>Concept Testing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="foldable">
+                                        <p class="title">Research Objective</p>
+                                        <p class="desc">How do RMs respond to the new YFP concept?</p>
+                                        <p class="title">Background</p>
+                                        <p class="desc">DBS Wealth Team is revamping their current financial planning tool called YFP (Your Financial Planner). The aim is to improve the overall conversational flow, integrate SALOR and update the design to the latest DLS. This is expected to see an improvement in feedback from RMs/WPMs who use this tool.</p>
+                                        <a href="#"><img src="./images/goto.png" />Access Report</a>
+                                    </div>
+
+                                    <img class="down-arrow" onclick="cardExpend('2')" src="images/down-arrow.png" />
+                                    <img class="up-arrow" onclick="cardCollapse('2')" src="images/up-arrow.png" />
+                                </div>
+                            </div>
+                            <!-- card end -->
+
+                            <!-- card -->
+                            <div class="card-container not-view" dritte-filter-data="Singapore">
+                                <div class="card card-3 hover-able">
+                                    <div class="stable">
+                                        <div class="card-logo">
+                                            <img src="images/Bitmap.png" />
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="paragraph">
+                                                <p>RMs want to be able to edit client information and converse with the client at the same time, in order to be more efficient at this stage of the wealth advisory process.</p>
+                                                <div>
+                                                    <p>Singapore</p>
+                                                    <span>Nov 10</span>
+                                                </div>
+                                            </div>
+                                            <div class="category">
+                                                <span>Digibank</span>
+                                                <span>Concept Testing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="foldable">
+                                        <p class="title">Research Objective</p>
+                                        <p class="desc">How do RMs respond to the new YFP concept?</p>
+                                        <p class="title">Background</p>
+                                        <p class="desc">DBS Wealth Team is revamping their current financial planning tool called YFP (Your Financial Planner). The aim is to improve the overall conversational flow, integrate SALOR and update the design to the latest DLS. This is expected to see an improvement in feedback from RMs/WPMs who use this tool.</p>
+                                        <a href="#"><img src="./images/goto.png" />Access Report</a>
+                                    </div>
+
+                                    <img class="down-arrow" onclick="cardExpend('3')" src="images/down-arrow.png" />
+                                    <img class="up-arrow" onclick="cardCollapse('3')" src="images/up-arrow.png" />
+                                </div>
+                            </div>
+                            <!-- card end -->
+
+                            <!-- card -->
+                            <div class="card-container not-view" dritte-filter-data="Singapore">
+                                <div class="card card-4 hover-able">
+                                    <div class="stable">
+                                        <div class="card-logo">
+                                            <img src="images/Bitmap.png" />
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="paragraph">
+                                                <p>RMs want to be able to edit client information and converse with the client at the same time, in order to be more efficient at this stage of the wealth advisory process.</p>
+                                                <div>
+                                                    <p>Singapore</p>
+                                                    <span>Nov 10</span>
+                                                </div>
+                                            </div>
+                                            <div class="category">
+                                                <span>Digibank</span>
+                                                <span>Concept Testing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="foldable">
+                                        <p class="title">Research Objective</p>
+                                        <p class="desc">How do RMs respond to the new YFP concept?</p>
+                                        <p class="title">Background</p>
+                                        <p class="desc">DBS Wealth Team is revamping their current financial planning tool called YFP (Your Financial Planner). The aim is to improve the overall conversational flow, integrate SALOR and update the design to the latest DLS. This is expected to see an improvement in feedback from RMs/WPMs who use this tool.</p>
+                                        <a href="#"><img src="./images/goto.png" />Access Report</a>
+                                    </div>
+
+                                    <img class="down-arrow" onclick="cardExpend('4')" src="images/down-arrow.png" />
+                                    <img class="up-arrow" onclick="cardCollapse('4')" src="images/up-arrow.png" />
+                                </div>
+                            </div>
+                            <!-- card end -->
+
+                            <!-- card -->
+                            <div class="card-container not-view" dritte-filter-data="Malaysia">
+                                <div class="card card-6 hover-able">
+                                    <div class="stable">
+                                        <div class="card-logo">
+                                            <img src="images/Bitmap.png" />
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="paragraph">
+                                                <p>RMs want to be able to edit client information and converse with the client at the same time, in order to be more efficient at this stage of the wealth advisory process.</p>
+                                                <div>
+                                                    <p>Malaysia</p>
+                                                    <span>Nov 10</span>
+                                                </div>
+                                            </div>
+                                            <div class="category">
+                                                <span>Digibank</span>
+                                                <span>Concept Testing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="foldable">
+                                        <p class="title">Research Objective</p>
+                                        <p class="desc">How do RMs respond to the new YFP concept?</p>
+                                        <p class="title">Background</p>
+                                        <p class="desc">DBS Wealth Team is revamping their current financial planning tool called YFP (Your Financial Planner). The aim is to improve the overall conversational flow, integrate SALOR and update the design to the latest DLS. This is expected to see an improvement in feedback from RMs/WPMs who use this tool.</p>
+                                        <a href="#"><img src="./images/goto.png" />Access Report</a>
+                                    </div>
+
+                                    <img class="down-arrow" onclick="cardExpend('6')" src="images/down-arrow.png" />
+                                    <img class="up-arrow" onclick="cardCollapse('6')" src="images/up-arrow.png" />
+                                </div>
+                            </div>
+                            <!-- card end -->
+                            
+                            <!-- card -->
+                            <div class="card-container not-view" dritte-filter-data="Malaysia">
+                                <div class="card card-7 hover-able">
+                                    <div class="stable">
+                                        <div class="card-logo">
+                                            <img src="images/Bitmap.png" />
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="paragraph">
+                                                <p>RMs want to be able to edit client information and converse with the client at the same time, in order to be more efficient at this stage of the wealth advisory process.</p>
+                                                <div>
+                                                    <p>Malaysia</p>
+                                                    <span>Nov 10</span>
+                                                </div>
+                                            </div>
+                                            <div class="category">
+                                                <span>Digibank</span>
+                                                <span>Concept Testing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="foldable">
+                                        <p class="title">Research Objective</p>
+                                        <p class="desc">How do RMs respond to the new YFP concept?</p>
+                                        <p class="title">Background</p>
+                                        <p class="desc">DBS Wealth Team is revamping their current financial planning tool called YFP (Your Financial Planner). The aim is to improve the overall conversational flow, integrate SALOR and update the design to the latest DLS. This is expected to see an improvement in feedback from RMs/WPMs who use this tool.</p>
+                                        <a href="#"><img src="./images/goto.png" />Access Report</a>
+                                    </div>
+
+                                    <img class="down-arrow" onclick="cardExpend('7')" src="images/down-arrow.png" />
+                                    <img class="up-arrow" onclick="cardCollapse('7')" src="images/up-arrow.png" />
+                                </div>
+                            </div>
+                            <!-- card end -->
+
+                            <!-- card -->
+                            <div class="card-container not-view" dritte-filter-data="Singapore">
+                                <div class="card card-8 hover-able">
+                                    <div class="stable">
+                                        <div class="card-logo">
+                                            <img src="images/Bitmap.png" />
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="paragraph">
+                                                <p>RMs want to be able to edit client information and converse with the client at the same time, in order to be more efficient at this stage of the wealth advisory process.</p>
+                                                <div>
+                                                    <p>Singapore</p>
+                                                    <span>Nov 10</span>
+                                                </div>
+                                            </div>
+                                            <div class="category">
+                                                <span>Digibank</span>
+                                                <span>Concept Testing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="foldable">
+                                        <p class="title">Research Objective</p>
+                                        <p class="desc">How do RMs respond to the new YFP concept?</p>
+                                        <p class="title">Background</p>
+                                        <p class="desc">DBS Wealth Team is revamping their current financial planning tool called YFP (Your Financial Planner). The aim is to improve the overall conversational flow, integrate SALOR and update the design to the latest DLS. This is expected to see an improvement in feedback from RMs/WPMs who use this tool.</p>
+                                        <a href="#"><img src="./images/goto.png" />Access Report</a>
+                                    </div>
+
+                                    <img class="down-arrow" onclick="cardExpend('8')" src="images/down-arrow.png" />
+                                    <img class="up-arrow" onclick="cardCollapse('8')" src="images/up-arrow.png" />
+                                </div>
+                            </div>
+                            <!-- card end -->
+
+                            <!-- card -->
+                            <div class="card-container not-view" dritte-filter-data="Malaysia">
+                                <div class="card card-9 hover-able">
+                                    <div class="stable">
+                                        <div class="card-logo">
+                                            <img src="images/Bitmap.png" />
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="paragraph">
+                                                <p>RMs want to be able to edit client information and converse with the client at the same time, in order to be more efficient at this stage of the wealth advisory process.</p>
+                                                <div>
+                                                    <p>Malaysia</p>
+                                                    <span>Nov 10</span>
+                                                </div>
+                                            </div>
+                                            <div class="category">
+                                                <span>Digibank</span>
+                                                <span>Concept Testing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="foldable">
+                                        <p class="title">Research Objective</p>
+                                        <p class="desc">How do RMs respond to the new YFP concept?</p>
+                                        <p class="title">Background</p>
+                                        <p class="desc">DBS Wealth Team is revamping their current financial planning tool called YFP (Your Financial Planner). The aim is to improve the overall conversational flow, integrate SALOR and update the design to the latest DLS. This is expected to see an improvement in feedback from RMs/WPMs who use this tool.</p>
+                                        <a href="#"><img src="./images/goto.png" />Access Report</a>
+                                    </div>
+
+                                    <img class="down-arrow" onclick="cardExpend('9')" src="images/down-arrow.png" />
+                                    <img class="up-arrow" onclick="cardCollapse('9')" src="images/up-arrow.png" />
+                                </div>
+                            </div>
+                            <!-- card end -->
+
+                            <!-- card -->
+                            <div class="card-container not-view" dritte-filter-data="Singapore">
+                                <div class="card card-10 hover-able">
+                                    <div class="stable">
+                                        <div class="card-logo">
+                                            <img src="images/Bitmap.png" />
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="paragraph">
+                                                <p>RMs want to be able to edit client information and converse with the client at the same time, in order to be more efficient at this stage of the wealth advisory process.</p>
+                                                <div>
+                                                    <p>Singapore</p>
+                                                    <span>Nov 10</span>
+                                                </div>
+                                            </div>
+                                            <div class="category">
+                                                <span>Digibank</span>
+                                                <span>Concept Testing</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="foldable">
+                                        <p class="title">Research Objective</p>
+                                        <p class="desc">How do RMs respond to the new YFP concept?</p>
+                                        <p class="title">Background</p>
+                                        <p class="desc">DBS Wealth Team is revamping their current financial planning tool called YFP (Your Financial Planner). The aim is to improve the overall conversational flow, integrate SALOR and update the design to the latest DLS. This is expected to see an improvement in feedback from RMs/WPMs who use this tool.</p>
+                                        <a href="#"><img src="./images/goto.png" />Access Report</a>
+                                    </div>
+
+                                    <img class="down-arrow" onclick="cardExpend('10')" src="images/down-arrow.png" />
+                                    <img class="up-arrow" onclick="cardCollapse('10')" src="images/up-arrow.png" />
+                                </div>
+                            </div>
+                            <!-- card end -->
+                        </div>
+                        <div class="load-more">
+                            <span id="loading" style="display: none;">loading</span>
+                            <input type="hidden" id="scroll-check" value="scroll" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        dritte(
+            {
+                filter: {
+                    type:           'select', // 'select' / 'check' / 'radio' / type
+                    name:           'filter-color',
+                    // value:          ['red', 'green', 'brown'],
+                    parent:         '.search-list-container',
+                    child:          '.card-container',
+                    child_attr:     'dritte-filter-data',
+                    paginate:       'paginate-color',
+                },
+                paginate: {
+                    name:           'paginate-color',
+                    per_page:       7, // default 10
+                    parent:         '.search-list-container',
+                    child:          '.card-container',
+                    total:          true,
+                    type:           {
+                        type:           'page', // 'page' / 'infinite-button' / 'infinite-scroll'
+                        image:          'https://www.bluechipexterminating.com/wp-content/uploads/2020/02/loading-gif-png-5.gif',
+                    },
+                    listyle:        { // not mandatory
+                        "padding": "5px 8px",
+                        "margin": "0px 4px",
+                        "background-color": "#dcdcdc",
+                        "color": "#aaaaaa",
+                        "min-width": "20px",
+                        "min-height": "20px",
+                        "border-radius": "3px",
+                        "text-align": "center",
+                        "cursor": "pointer"
+                    }
+                }
+            }
+        );
+    </script>
+</html>
