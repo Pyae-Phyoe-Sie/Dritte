@@ -1,3 +1,8 @@
+.dritte-filter-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 ul {
     padding: 0px;
 }
@@ -6,7 +11,7 @@ ul.filter-check {
     list-style: none;
     display: flex;
     justify-content: flex-end;
-    padding-top: 20px;
+    margin: 0px;
 }
 
 ul.filter-check li {
@@ -49,6 +54,81 @@ ul.filter-check li input[type="checkbox"]:checked + label,
 ul.filter-check li input[type="radio"]:checked + label {
     box-shadow: inset -2px -2px 5px rgba(255, 255, 255, 1),
               inset 3px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+ul.paginate-pages li {
+    padding: 5px 8px;
+    margin: 0px 4px;
+    background-color: #dcdcdc;
+    color: #aaaaaa;
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+}
+
+ul.paginate-pages p {
+    padding: 5px 8px;
+    margin: 0px 4px;
+    color: rgb(170, 170, 170);
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.remove-text {
+    display: none;
+}
+
+.filter-text-item:valid ~ .remove-text {
+    display: initial;
+}
+
+.no-data {
+    font-size: 30px;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+    background-color: #757575;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: rgba(255,255,255,0.5) 0px 3px 3px;
+    font-family: sans-serif;
+}
+
+.dritte-hide {
+    display: none;
+}
+
+.dritte-animate-container {
+    margin: 5px 0px;
+}
+
+button {
+    padding: 7px 10px;
+}
+
+input[type=text] {
+    height: 20px;
+}
+
+select {
+    height: 45px;
+}
+
+input[type=text],
+select {
+    width: 200px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    margin-right: 5px;
+    border: 1px solid #959595;
+    color: #666666;
 }
 
 /* li.active,

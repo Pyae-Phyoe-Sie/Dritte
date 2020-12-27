@@ -11,20 +11,26 @@
             }
             body {
                 overflow: hidden;
+                display: flex;
             }
-            /* .dritte-grid {
-                width: 300px;
+            .dritte-grid,
+            .card-grid {
+                width: 49%;
                 height: 500px;
                 overflow-y: auto;
                 overflow-x: hidden;
-            } */
-            .dritte-flex {
+                position: relative;
+            }
+            
+            .dritte-flex,
+            .card-flex {
                 display: flex;
                 flex-direction: column;
                 flex-wrap: wrap;
             }
 
-            .dritte-item {
+            .dritte-item,
+            .card-item {
                 width: 100%;
                 height: 100px;
                 border-radius: 5px;
@@ -35,22 +41,8 @@
                 line-height: 5rem;
             }
 
-            .dritte-animate-container {
-                margin: 5px 0px;
-            }
-
             .dritte-animate-container .dritte-item {
                 margin: 0px;
-            }
-
-            button {
-                padding: 7px 10px;
-            }
-
-            input[type=text],
-            select {
-                width: 200px;
-                padding: 6px 10px;
             }
         </style>
     </head>
@@ -107,6 +99,59 @@
                 <div class="dritte-item" dritte-filter-color="yellow" dritte-filter-data="lamp" style="background-color: yellow;">Lamp</div>
             </div>
         </div>
+
+        <div class="card-grid">
+            <div class="card-flex">
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="stoke" style="background-color: #c70e0e;">Stoke</div>
+                <div class="card-item" dritte-filter-color="green" dritte-filter-data="lamp" style="background-color: green;">Lamp</div>
+                <div class="card-item" dritte-filter-color="black" dritte-filter-data="bulb" style="background-color: black;">bulb</div>
+                <div class="card-item" dritte-filter-color="purple" dritte-filter-data="touch" style="background-color: #c129ad;">touch</div>
+                <div class="card-item" dritte-filter-color="brown" dritte-filter-data="stoke" style="background-color: brown;">Stoke</div>
+                <div class="card-item" dritte-filter-color="yellow" dritte-filter-data="led" style="background-color: yellow;">LED</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="touch" style="background-color: #c70e0e;">Touch</div>
+                <div class="card-item" dritte-filter-color="brown" dritte-filter-data="stoke" style="background-color: brown;">Stoke</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="lamp" style="background-color: #c70e0e;">Lamp</div>
+                <div class="card-item" dritte-filter-color="black" dritte-filter-data="led" style="background-color: black;">LED</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="touch" style="background-color: #c70e0e;">Touch</div>
+                <div class="card-item" dritte-filter-color="yellow" dritte-filter-data="bulb" style="background-color: yellow;">Bulb</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="lamp" style="background-color: #c70e0e;">Lamp</div>
+                <div class="card-item" dritte-filter-color="green" dritte-filter-data="bulb" style="background-color: green;">Bulb</div>
+                <div class="card-item" dritte-filter-color="black" dritte-filter-data="led" style="background-color: black;">LED</div>
+                <div class="card-item" dritte-filter-color="purple" dritte-filter-data="lamp" style="background-color: #c129ad;">Lamp</div>
+                <div class="card-item" dritte-filter-color="brown" dritte-filter-data="stoke" style="background-color: brown;">Stoke</div>
+                <div class="card-item" dritte-filter-color="brown" dritte-filter-data="touch" style="background-color: brown;">Touch</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="led" style="background-color: #c70e0e;">LED</div>
+                <div class="card-item" dritte-filter-color="black" dritte-filter-data="stoke" style="background-color: black;">Stoke</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="led" style="background-color: #c70e0e;">LED</div>
+                <div class="card-item" dritte-filter-color="yellow" dritte-filter-data="touch" style="background-color: yellow;">Touch</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="led" style="background-color: #c70e0e;">LED</div>
+                <div class="card-item" dritte-filter-color="green" dritte-filter-data="stoke" style="background-color: green;">Stoke</div>
+                <div class="card-item" dritte-filter-color="black" dritte-filter-data="lamp" style="background-color: black;">Lamp</div>
+                <div class="card-item" dritte-filter-color="purple" dritte-filter-data="touch" style="background-color: #c129ad;">Touch</div>
+                <div class="card-item" dritte-filter-color="brown" dritte-filter-data="bulb" style="background-color: brown;">Bulb</div>
+                <div class="card-item" dritte-filter-color="yellow" dritte-filter-data="bulb" style="background-color: yellow;">Bulb</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="led" style="background-color: #c70e0e;">LED</div>
+                <div class="card-item" dritte-filter-color="brown" dritte-filter-data="touch" style="background-color: brown;">Touch</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="touch" style="background-color: #c70e0e;">Touch</div>
+                <div class="card-item" dritte-filter-color="black" dritte-filter-data="lamp" style="background-color: black;">Lamp</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="led" style="background-color: #c70e0e;">LED</div>
+                <div class="card-item" dritte-filter-color="yellow" dritte-filter-data="bulb" style="background-color: yellow;">Bulb</div>
+                <div class="card-item" dritte-filter-color="brown" dritte-filter-data="stoke" style="background-color: brown;">Stoke</div>
+                <div class="card-item" dritte-filter-color="yellow" dritte-filter-data="led" style="background-color: yellow;">LED</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="touch" style="background-color: #c70e0e;">Touch</div>
+                <div class="card-item" dritte-filter-color="green" dritte-filter-data="stoke"  style="background-color: green;">Stoke</div>
+                <div class="card-item" dritte-filter-color="black" dritte-filter-data="stoke" style="background-color: black;">Stoke</div>
+                <div class="card-item" dritte-filter-color="purple" dritte-filter-data="touch" style="background-color: #c129ad;">Touch</div>
+                <div class="card-item" dritte-filter-color="brown" dritte-filter-data="led" style="background-color: brown;">LED</div>
+                <div class="card-item" dritte-filter-color="yellow" dritte-filter-data="led" style="background-color: yellow;">LED</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="lamp" style="background-color: #c70e0e;">Lamp</div>
+                <div class="card-item" dritte-filter-color="brown" dritte-filter-data="stoke" style="background-color: brown;">Stoke</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="bulb" style="background-color: #c70e0e;">Bulb</div>
+                <div class="card-item" dritte-filter-color="black" dritte-filter-data="led" style="background-color: black;">LED</div>
+                <div class="card-item" dritte-filter-color="red" dritte-filter-data="touch" style="background-color: #c70e0e;">Touch</div>
+                <div class="card-item" dritte-filter-color="yellow" dritte-filter-data="lamp" style="background-color: yellow;">Lamp</div>
+            </div>
+        </div>
     </body>
 
     <script>
@@ -118,7 +163,7 @@
                     name:           'filter-color',
                     childFilter:    [
                         {
-                            type:           'check', // 'select' / 'check' / 'radio' / type
+                            type:           'type', // 'select' / 'check' / 'radio' / type
                             // value:          ['red', 'green', 'brown'],
                             child_attr:     'dritte-filter-color',
                             name:           'attr1',
@@ -140,35 +185,70 @@
                     total:          true,
                     type:           {
                         type:               'infinite-scroll', // 'page' | 'infinite-button' | 'infinite-scroll'
+                        animate:            'bounce-in', // 'fade-in' | 'slide-up' | 'slide-left' | 'slide-right' | 'bounce-in' | 'y-flip' | 'x-flip'
+                        childDefaultHeight: '100px', // if 'slide-up' | 'slide-left' need child height
+                        scrollWorkOn:       'parent', // default window
+                        image:              'https://www.bluechipexterminating.com/wp-content/uploads/2020/02/loading-gif-png-5.gif',
+                    }
+                },
+            }
+        );
+        dritte( {
+                filter: {
+                    parent:         '.card-grid',
+                    child:          '.card-item',
+                    name:           'card-color',
+                    childFilter:    [
+                        {
+                            type:           'radio', // 'select' / 'check' / 'radio' / type
+                            // value:          ['red', 'green', 'brown'],
+                            child_attr:     'dritte-filter-color',
+                            name:           'attr1',
+                        },
+                        {
+                            type:           'select', // 'select' / 'check' / 'radio' / type
+                            // value:          ['red', 'green', 'brown'],
+                            child_attr:     'dritte-filter-data',
+                            name:           'attr2',
+                        }
+                    ],
+                    paginate:       'paginate-card',
+                },
+                paginate: {
+                    name:           'paginate-card',
+                    per_page:       7, // default 10
+                    parent:         '.card-grid',
+                    child:          '.card-item',
+                    total:          true,
+                    type:           {
+                        type:               'page', // 'page' | 'infinite-button' | 'infinite-scroll'
                         animate:            'x-flip', // 'fade-in' | 'slide-up' | 'slide-left' | 'slide-right' | 'bounce-in' | 'y-flip' | 'x-flip'
                         childDefaultHeight: '100px', // if 'slide-up' | 'slide-left' need child height
                         scrollWorkOn:       'parent', // default window
                         image:              'https://www.bluechipexterminating.com/wp-content/uploads/2020/02/loading-gif-png-5.gif',
-                    },
-                    listyle:        { // not mandatory
-                        "padding": "5px 8px",
-                        "margin": "0px 4px",
-                        "background-color": "#dcdcdc",
-                        "color": "#aaaaaa",
-                        "min-width": "20px",
-                        "min-height": "20px",
-                        "border-radius": "3px",
-                        "text-align": "center",
-                        "cursor": "pointer"
                     }
                 }
             }
         );
 
         $(document).ready(function() {
-            // $('.dritte-grid').on('scroll', function() {
+            $('.dritte-grid').on('scroll', function() {
 
-            //     // check for infinite scroll
-            //     checkforInfiniteScroll();
+                // check for infinite scroll
+                checkforInfiniteScroll($(this));
 
-            //     // check for not view
-            //     checkViewWhenScroll();
-            // });
+                // check for not view
+                checkViewWhenScroll($(this));
+            });
+
+            $('.card-grid').on('scroll', function() {
+
+                // check for infinite scroll
+                // checkforInfiniteScroll($(this));
+
+                // check for not view
+                checkViewWhenScroll($(this));
+            });
         });
     </script>
 </html>

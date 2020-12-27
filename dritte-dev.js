@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
     // to bind input suggest value
     if($('.filter-suggest').length > 0) {
         if ($('.filter-suggest p').length == 0) {
@@ -83,8 +82,8 @@ $(document).ready(function() {
         let property = JSON.parse(localStorage.getItem(propertyName));
         let attr;
         let value = $(this).val()+e.key;
-
         (property.childFilter).forEach(function(childFilter) {
+            filterName = filterName.replace(property.name+"-", "");
             if (childFilter.name == filterName) {
                 childFilter.selectedFilterValue = value;
                 attr = childFilter.child_attr;
@@ -104,7 +103,7 @@ $(document).ready(function() {
             }
         });
 
-        addsuggest(suggest, filterName, propertyName);
+        addsuggest(suggest, filterName, property);
         
         var filter = new Filter(property);
         filter.action();
@@ -154,25 +153,26 @@ $(document).ready(function() {
 });
 
 // for text box filter
-function addsuggest(suggest, filterName, propertyName) {
-    $('.filter-suggest').show();
-    $('.filter-suggest p').remove();
-    if ($('.filter-suggest p').length == 0) {
-        $('.filter-suggest').css('border', 'none');
+function addsuggest(suggest, filterName, property) {
+    // console.log(property.parent);
+    $(property.parent+' .filter-suggest.'+property.name+'-'+filterName).show();
+    $(property.parent).find('.filter-suggest.'+property.name+'-'+filterName+' p').remove();
+    if ($(property.parent).find('.filter-suggest.'+property.name+'-'+filterName+' p').length == 0) {
+        $(property.parent).find('.filter-suggest.'+property.name+'-'+filterName+'').css('border', 'none');
     } else {
-        $('.filter-suggest').css('border', '1px solid #c1c1c1');
+        $(property.parent).find('.filter-suggest.'+property.name+'-'+filterName+'').css('border', '1px solid #c1c1c1');
     }
     suggest.forEach(element => 
-        $('.filter-suggest').append("<p style='margin: 0px;padding: 3px 7px;' onclick='selectSuggest(`"+element+','+filterName+','+propertyName+"`)'>"+element+"</p>")
+        $(property.parent).find('.filter-suggest.'+property.name+'-'+filterName+'').append("<p style='margin: 0px;padding: 3px 7px;' onclick='selectSuggest(`"+element+','+filterName+','+property.name+','+property.parent+"`)'>"+element+"</p>")
     );
 }
 
 // for text box filter
 function selectSuggest(value) {
     var keyAndValue = value.split(",");
-    console.log(keyAndValue)
-    $('.filter-suggest p').remove();
-    $('.filter-check input[type=text]').val(keyAndValue[0]);
+    // console.log(keyAndValue)
+    $(keyAndValue[3]).find('.filter-suggest.'+keyAndValue[2]+'-'+keyAndValue[1]+' p').remove();
+    $(keyAndValue[3]).find('.filter-check input#'+keyAndValue[2]+'-'+keyAndValue[1]).val(keyAndValue[0]);
     let property = JSON.parse(localStorage.getItem(keyAndValue[2]));
 
     (property.childFilter).forEach(function(childFilter) {
@@ -188,10 +188,8 @@ function selectSuggest(value) {
 }
 
 function dritte(items) {
-    localStorage.removeItem('showIndex');
-    localStorage.removeItem('multiFilter');
-
     $.each(items, function (index, value) {
+        localStorage.removeItem(value.name+'-showIndex');
         switch (index) {
             // for paginate
             case 'paginate':
@@ -210,71 +208,71 @@ function showClickPage(page, key) {
     let property = JSON.parse(localStorage.getItem(key));
     let paginate = new Paginate(property);
     if (page == 'prev') {
-        page = parseInt($('#active-page').val()) - 1;
+        page = parseInt($(property.parent).find('#active-page').val()) - 1;
     } else if (page == 'next') {
-        page = parseInt($('#active-page').val()) + 1;
+        page = parseInt($(property.parent).find('#active-page').val()) + 1;
     }
 
     if (page == 0) {
-        page = parseInt($('#active-page').val()) + 1;
+        page = parseInt($(property.parent).find('#active-page').val()) + 1;
 
-        $('#loading').show();
+        $(property.parent).find('#loading').show();
         $('#'+property.name).hide();
         setTimeout(function(){
             let result = paginate.showPage(page);
-            if (result && parseInt($('#total-page').val()) > page) {
+            if (result && parseInt($(property.parent).find('#total-page').val()) > page) {
                 $('#'+property.name).show();
             }
-            $('#loading').hide();
+            $(property.parent).find('#loading').hide();
         }, 500);
     } else {
-        let start, end;
-        if (page == 1) {
-            start = 1;
-            end = 1+2;
-            if (end < parseInt($('#total-page').val())) {
-                $('.next-more').show();
-            }
-            $('.prev').hide();
-            $('.next').show();
-        } else if (parseInt($('#total-page').val()) == page) {
-            start = page - 2;
-            end = page;
-            if (start > 1) {
-                $('.prev-more').show();
-            }
-            $('.prev').show();
-            $('.next').hide();
-        } else {
-            start = page - 2;
-            end = page + 2;
-            if (start <= 1) {
-                start = 1;
-                $('.prev-more').hide();
-            } else {
-                $('.prev-more').show();
-            }
-            if (parseInt($('#total-page').val()) <= end) {
-                end = parseInt($('#total-page').val());
-                $('.next-more').hide();
-            } else {
-                $('.next-more').show();
-            }
-            $('.prev').show();
-            $('.next').show();
-        }
+        // let start, end;
+        // if (page == 1) {
+        //     start = 1;
+        //     end = 1+2;
+        //     if (end < parseInt($(property.parent).find('#total-page').val())) {
+        //         $(property.parent).find('.next-more').show();
+        //     }
+        //     $(property.parent).find('.prev').hide();
+        //     $(property.parent).find('.next').show();
+        // } else if (parseInt($(property.parent).find('#total-page').val()) == page) {
+        //     start = page - 2;
+        //     end = page;
+        //     if (start > 1) {
+        //         $(property.parent).find('.prev-more').show();
+        //     }
+        //     $(property.parent).find('.prev').show();
+        //     $(property.parent).find('.next').hide();
+        // } else {
+        //     start = page - 2;
+        //     end = page + 2;
+        //     if (start <= 1) {
+        //         start = 1;
+        //         $(property.parent).find('.prev-more').hide();
+        //     } else {
+        //         $(property.parent).find('.prev-more').show();
+        //     }
+        //     if (parseInt($(property.parent).find('#total-page').val()) <= end) {
+        //         end = parseInt($(property.parent).find('#total-page').val());
+        //         $(property.parent).find('.next-more').hide();
+        //     } else {
+        //         $(property.parent).find('.next-more').show();
+        //     }
+        //     $(property.parent).find('.prev').show();
+        //     $(property.parent).find('.next').show();
+        // }
 
-        $('ul.paginate-pages>li.page').hide();
-        for (let i = start; i <= end; i++) {
-            $('ul.paginate-pages>li.page-'+i).show();
-        }
+        // $(property.parent).find('ul.paginate-pages>li.page').hide();
+        // for (let i = start; i <= end; i++) {
+        //     $(property.parent).find('ul.paginate-pages>li.page-'+i).show();
+        // }
 
-        $('ul.paginate-pages>li.active').removeClass('active');
-        $('ul.paginate-pages>li.page-'+page).addClass('active');
+        // $(property.parent).find('ul.paginate-pages>li.active').removeClass('active');
+        // $(property.parent).find('ul.paginate-pages>li.page-'+page).addClass('active');
         paginate.showPage(page);
     }
 
-    $('#active-page').val(page);
+    $(property.parent).find('#active-page').val(page);
 }
 
 function selectFilter(key) {
@@ -283,7 +281,7 @@ function selectFilter(key) {
     let keyAndValue = key.split(",");
     let property = JSON.parse(localStorage.getItem(keyAndValue[1]));
     
-    (property.childFilter).forEach(function(childFilter, index) {
+    (property.childFilter).forEach(function(childFilter) {
         if (childFilter.name == keyAndValue[0]) {
             childFilter.selectedFilterValue = checkValue;
         }
@@ -296,29 +294,29 @@ function selectFilter(key) {
     filter.action();
 }
 
-function checkforInfiniteScroll() {
+function checkforInfiniteScroll(parentEl) {
+    // console.log(parentEl.find('#scroll-property').val());
+    let property = JSON.parse(localStorage.getItem(parentEl.find('#scroll-property').val()));
     if ($('.paginate-scroll').length > 0) {
-        if (parseInt($('#active-page').val()) == parseInt($('#total-page').val())) {
-            let property = JSON.parse(localStorage.getItem($('#scroll-property').val()));
-
+        if (parseInt($(property.parent).find('#active-page').val()) <= parseInt($(property.parent).find('#total-page').val())) {
             // for infinite scroll
-            if (isElementTopInView($('.paginate-scroll'))) {
-                if ($('#scroll-able').val() == "scroll") {
-                    $('#scroll-able').val('progress');
-                    page = parseInt($('#active-page').val()) + 1;
-                    $('#active-page').val(page);
+            if (isElementTopInView($(property.parent).find('.paginate-scroll'))) {
+                if ($(property.parent).find('#scroll-able').val() == "scroll") {
+                    $(property.parent).find('#scroll-able').val('progress');
+                    page = parseInt($(property.parent).find('#active-page').val()) + 1;
+                    $(property.parent).find('#active-page').val(page);
                     
                     var paginate = new Paginate(property);
         
-                    $('#loading').show();
+                    $(property.parent).find('#loading').show();
                     setTimeout(function(){
                         let result = paginate.showPage(page);
                         if (result) {
-                            $('#scroll-able').val('scroll');
+                            $(property.parent).find('#scroll-able').val('scroll');
                         }
-                        $('#loading').hide();
-                        if (parseInt($('#total-page').val()) == page) {
-                            $('#scroll-able').val('end');
+                        $(property.parent).find('#loading').hide();
+                        if (parseInt($(property.parent).find('#total-page').val()) == page) {
+                            $(property.parent).find('#scroll-able').val('end');
                             $('#'+property.name).remove();
                             // $('#loading').remove();
                         }
@@ -378,6 +376,10 @@ function isElementTopInView($el, custom = null, parent = null) {
     }
 
     return elementTop < viewportBottom;
+}
+
+function deleteText(el) {
+    $('#'+el).val('');
 }
 
 class Paginate {
@@ -453,7 +455,7 @@ class Paginate {
         if (property.hasOwnProperty('showIndex')) {
             showList = JSON.parse(localStorage.getItem(property.showIndex));
         } else {
-            showList = JSON.parse(localStorage.getItem('showIndex'));
+            showList = JSON.parse(localStorage.getItem(this.property.name+'-showIndex'));
         }
 
         if (showList === null) {
@@ -467,7 +469,7 @@ class Paginate {
                     showIndex.push($(this).index());
                 }
             });
-            localStorage.setItem('showIndex', JSON.stringify(showIndex));
+            localStorage.setItem(this.property.name+'-showIndex', JSON.stringify(showIndex));
             paginateItems = showIndex.length;
         } else {
             paginateItems = showList.length;
@@ -488,43 +490,40 @@ class Paginate {
             // for paginate
             case 'page':
                 $( "<style>li.active, li:hover { background-color: #3299ff !important;color: #fff !important; } li.prev, li.next { color: #fff !important; }</style>" ).appendTo( "head" );
-                let pageNumberLi = '<input type="hidden" id="active-page" value="1" />'+
+                let pageNumberLi = '<div class="paginate-pages-container"><input type="hidden" id="active-page" value="1" />'+
                                     '<input type="hidden" class="paginate-key" value="'+this.property.name+'"/>'+
                                     '<input type="hidden" id="total-page" value="'+pages+'" />';
                 pageNumberLi += '<ul class="paginate-pages">';
                 if (pages > 1) {
                     pageNumberLi += '<li class="prev" onclick="showClickPage(`prev`, `'+this.property.name+'`)" style="display: none"><<</li>';
-                    pageNumberLi += '<li class="prev-more" style="display: none">...</li>';
+                    pageNumberLi += '<p class="prev-more" style="display: none">...</p>';
                 }
                 for (var i = 1; i <= pages; i++) {
                     pageNumberLi += '<li class="page page-'+i+'" onclick="showClickPage('+i+', `'+this.property.name+'`)">'+i+'</li>';
                 }
                 if (pages > 1) {
-                    pageNumberLi += '<li class="next-more" style="display: none">...</li>';
+                    pageNumberLi += '<p class="next-more" style="display: none">...</p>';
                     pageNumberLi += '<li class="next" onclick="showClickPage(`next`, `'+this.property.name+'`)">>></li>';
                 }
-                pageNumberLi += '</ul>';
-                if ($('.paginate-pages').length != 0) {
-                    $('.paginate-pages').remove();
+                pageNumberLi += '</ul></div>';
+                if ($(this.property.parent+' .paginate-pages-container').length != 0) {
+                    $(this.property.parent+' .paginate-pages-container').remove();
                     $('#active-page').remove();
                     $('#total-page').remove();
                 }
                 $(this.property.parent).append(pageNumberLi);
-                $(".paginate-pages").css({
+                $(this.property.parent+" .paginate-pages").css({
                     "display": "flex",
                     "list-style": "none",
                     "justify-content": "center",
                     "padding": "0px"
                 });
-                if(this.property.hasOwnProperty('listyle')){
-                    $(".paginate-pages li").css(this.property.listyle);
-                }
                 break;
             case 'infinite-button':
-                if ($('.paginate-button').length != 0) {
-                    $('.paginate-button').remove();
+                if ($(this.property.parent+' .paginate-button').length != 0) {
+                    $(this.property.parent+' .paginate-button').remove();
                 }
-                let infiniteBtn = '<div class="paginate-button">'+
+                let infiniteBtn = '<div class="paginate-button" style="text-align: center;">'+
                     '<input type="hidden" class="paginate-key" value="'+this.property.name+'"/>'+
                     '<input type="hidden" id="active-page" value="1" />'+
                     '<input type="hidden" id="total-page" value="'+pages+'" />'+
@@ -533,10 +532,10 @@ class Paginate {
                 $(this.property.parent).append(infiniteBtn);
                 break;
             case 'infinite-scroll':
-                if ($('.paginate-scroll').length != 0) {
-                    $('.paginate-scroll').remove();
+                if ($(this.property.parent+' .paginate-scroll').length != 0) {
+                    $(this.property.parent+' .paginate-scroll').remove();
                 }
-                let infiniteScroll = '<div class="paginate-scroll">'+
+                let infiniteScroll = '<div class="paginate-scroll" style="text-align: center;">'+
                     '<input type="hidden" class="paginate-key" value="'+this.property.name+'"/>'+
                     '<input type="hidden" id="active-page" value="1" />'+
                     '<input type="hidden" id="total-page" value="'+pages+'" />'+
@@ -550,18 +549,63 @@ class Paginate {
 
     showPage(page) {
         let property = this.property;
-        $('li.page-'+page).addClass('active');
+        $(property.parent).find('li.page-'+page).addClass('active');
 
+        // to show paginate page nav
+        let paginateStart, paginateEnd;
+        if (page == 1) {
+            paginateStart = 1;
+            paginateEnd = 1+2;
+            if (paginateEnd < parseInt($(property.parent).find('#total-page').val())) {
+                $(property.parent).find('.next-more').show();
+            }
+            $(property.parent).find('.prev').hide();
+            $(property.parent).find('.next').show();
+        } else if (parseInt($(property.parent).find('#total-page').val()) == page) {
+            paginateStart = page - 2;
+            paginateEnd = page;
+            if (paginateStart > 1) {
+                $(property.parent).find('.prev-more').show();
+            }
+            $(property.parent).find('.prev').show();
+            $(property.parent).find('.next').hide();
+        } else {
+            paginateStart = page - 2;
+            paginateEnd = page + 2;
+            if (paginateStart <= 1) {
+                paginateStart = 1;
+                $(property.parent).find('.prev-more').hide();
+            } else {
+                $(property.parent).find('.prev-more').show();
+            }
+            if (parseInt($(property.parent).find('#total-page').val()) <= paginateEnd) {
+                paginateEnd = parseInt($(property.parent).find('#total-page').val());
+                $(property.parent).find('.next-more').hide();
+            } else {
+                $(property.parent).find('.next-more').show();
+            }
+            $(property.parent).find('.prev').show();
+            $(property.parent).find('.next').show();
+        }
+
+        $(property.parent).find('ul.paginate-pages>li.page').hide();
+        for (let i = paginateStart; i <= paginateEnd; i++) {
+            $(property.parent).find('ul.paginate-pages>li.page-'+i).show();
+        }
+
+        $(property.parent).find('ul.paginate-pages>li.active').removeClass('active');
+        $(property.parent).find('ul.paginate-pages>li.page-'+page).addClass('active');
+        // end show paginate page nav
+
+        // start to show child index
         let start = (page - 1)*(property.per_page) + 1;
         let end = (page)*(property.per_page);
         let showList;
 
         if (property.hasOwnProperty('showIndex')) {
-            console.log('filter index')
             showList = JSON.parse(localStorage.getItem(property.showIndex));
         } else {
-            console.log('default index')
-            showList = JSON.parse(localStorage.getItem('showIndex'));
+            showList = JSON.parse(localStorage.getItem(property.name+'-showIndex'));
         }
         let delay = 0;
 
@@ -577,12 +621,12 @@ class Paginate {
             
             setTimeout(function(){
                 if ($(property.parent+' '+property.child).parent('.dritte-animate-container').length > 0) {
-                    $(property.parent+' '+property.child).parent('.dritte-animate-container').hide();
+                    $(property.parent+' '+property.child).parent('.dritte-animate-container').addClass('dritte-hide');
                     // if (property.type != 'page') {
-                        $(property.parent+' '+property.child).hide();
+                        $(property.parent+' '+property.child).addClass('dritte-hide');
                     // }
                 } else {
-                    $(property.parent+' '+property.child).hide();
+                    $(property.parent+' '+property.child).addClass('dritte-hide');
                 }
                 // $(property.parent+' '+property.child).hide();
             }, delay);
@@ -591,32 +635,24 @@ class Paginate {
         setTimeout(function(){
             for (var i = start - 1; i < end; i++) {
                 if (i in showList) {
-                    // if (property.type.type != 'page') {
-                        if(property.type.hasOwnProperty('animate')){
-                            if ($(property.parent+' '+property.child).parent('.dritte-animate-container').length > 0) {
-                                $(property.parent+' .dritte-animate-container:nth-child('+(showList[i]+1)+')').show();
-                                $(property.parent+' .dritte-animate-container:nth-child('+(showList[i]+1)+') '+property.child).show();
-                            } else {
-                                $(property.parent+' '+property.child+':nth-child('+(showList[i]+1)+')').show();
-                            }
-                            // if (property.type.animate == 'slide-up' || property.type.animate == 'slide-left' || property.type.animate == 'slide-right') {
-                            //     $(property.parent+' .dritte-animate-container:nth-child('+(showList[i]+1)+')').show();
-                            //     $(property.parent+' .dritte-animate-container:nth-child('+(showList[i]+1)+') '+property.child).show();
-                            // } else {
-                            //     $(property.parent+' '+property.child+':nth-child('+(showList[i]+1)+')').show();
-                            // }
+                    if(property.type.hasOwnProperty('animate')){
+                        if ($(property.parent+' '+property.child).parent('.dritte-animate-container').length > 0) {
+                            $(property.parent+' .dritte-animate-container:nth-child('+(showList[i]+1)+')').removeClass('dritte-hide');
+                            $(property.parent+' .dritte-animate-container:nth-child('+(showList[i]+1)+') '+property.child).removeClass('dritte-hide');
                         } else {
-                            $(property.parent+' '+property.child+':nth-child('+(showList[i]+1)+')').show();
+                            $(property.parent+' '+property.child+':nth-child('+(showList[i]+1)+')').removeClass('dritte-hide');
                         }
-                    // } else {
-                    //     $(property.parent+' '+property.child+':nth-child('+(showList[i]+1)+')').show();
-                    // }
+                    } else {
+                        $(property.parent+' '+property.child+':nth-child('+(showList[i]+1)+')').removeClass('dritte-hide');
+                    }
                 }
             }
 
             // check for not view
             checkViewWhenScroll();
         }, delay);
+
+
 
         return true;
     }
@@ -630,6 +666,7 @@ class Filter {
     }
 
     mainFilter() {
+        localStorage.removeItem(this.property.name+'-showIndex');
         let self = this;
         self.checkFilterType();
     }
@@ -664,40 +701,45 @@ class Filter {
             obj.value = array;
         }
 
+        if ($(this.property.parent+' .dritte-filter-container').length == 0) {
+            $(this.property.parent).prepend("<div class='dritte-filter-container'></div>");
+        }
+
         switch(obj.type) {
             case 'select':
                 child += '<option value="">default</option>';
                 obj.value.forEach(element => {
                     child += '<option value='+element+'>'+element+'</option>';
                 });
-                $(this.property.parent).prepend('<select id="'+obj.name+'-'+this.property.name+'" onchange="selectFilter(`'+obj.name+','+this.property.name+'`)">'+child+'</select>');
+                $(this.property.parent+' .dritte-filter-container').append('<select id="'+obj.name+'-'+this.property.name+'" onchange="selectFilter(`'+obj.name+','+this.property.name+'`)">'+child+'</select>');
                 break;
             case 'check':
                 // child += '<input type="hidden" class="filter-key" value="'+this.property.name+'"/>';
                 child += '<ul class="filter-check">';
                 obj.value.forEach(element => {
-                    child += '<li><input type="checkbox" id="'+element+'" class="filter-check-item" value="'+element+','+obj.name+','+property.name+'"/><label for="'+element+'">'+element+'</label></li>';
+                    child += '<li><input type="checkbox" id="'+this.property.name+'-'+obj.name+'-'+element+'" class="filter-check-item" value="'+element+','+obj.name+','+property.name+'"/><label for="'+this.property.name+'-'+obj.name+'-'+element+'">'+element+'</label></li>';
                     // child += '<input type="checkbox" class="filter-check-item" value="'+element+'"/><span>'+element+'</span>';
                 });
                 child += '</ul>';
-                $(this.property.parent).prepend(child);
+                $(this.property.parent+' .dritte-filter-container').append(child);
                 break;
             case 'radio':
                 // child += '<input type="hidden" class="filter-key" value="'+this.property.name+'"/>';
                 child += '<ul class="filter-check">';
                 obj.value.forEach(element => {
-                    child += '<li><input type="radio" id="'+element+'" class="filter-radio-item" name="'+this.property.name+'" value="'+element+','+obj.name+','+property.name+'"/><label for="'+element+'">'+element+'</label></li>';
+                    child += '<li><input type="radio" id="'+this.property.name+'-'+obj.name+'-'+element+'" class="filter-radio-item" name="'+this.property.name+'" value="'+element+','+obj.name+','+property.name+'"/><label for="'+this.property.name+'-'+obj.name+'-'+element+'">'+element+'</label></li>';
                     // child += '<input type="radio" class="filter-radio-item" name="'+this.property.name+'" value="'+element+'"/> '+element;
                 });
                 child += '</ul>';
-                $(this.property.parent).prepend(child);
+                $(this.property.parent+' .dritte-filter-container').append(child);
                 break;
             case 'type':
-                child += '<div class="filter-check"><input type="text" class="filter-text-item" id="'+obj.name+'" />';
-                child += '<input type="hidden" class="'+obj.name+'" value="'+property.name+'"/>';
-                child += '<div class="filter-suggest" style="position: absolute;z-index: 1;background-color: #fff; border: 1px solid #c1c1c1;border-radius: 5px;"></div>';
+                child += '<div class="filter-check" style="position: relative;"><div><input type="text" class="filter-text-item" id="'+this.property.name+'-'+obj.name+'" required />';
+                child += '<span style="margin-left: -20px;cursor: pointer;" class="remove-text" onClick="deleteText(`'+this.property.name+'-'+obj.name+'`)">&#10005;</span></div>';
+                child += '<input type="hidden" class="'+this.property.name+'-'+obj.name+'" value="'+property.name+'"/>';
+                child += '<div class="filter-suggest '+this.property.name+'-'+obj.name+'" style="position: absolute;z-index: 1;background-color: #fff; border: 1px solid #c1c1c1;border-radius: 5px;"></div>';
                 child += '</div>';
-                $(this.property.parent).prepend(child);
+                $(this.property.parent+' .dritte-filter-container').append(child);
         }
     }
 
@@ -708,47 +750,57 @@ class Filter {
         (filterProperty.childFilter).forEach(function(filter) {
             if (filter.hasOwnProperty('selectedFilterValue')) {
                 let filterValue = filter.selectedFilterValue;
-                if (showElement.length == 0) {
-                    $(filterProperty.parent+' '+filterProperty.child).each(function() {
-                        if (filter.type == 'type') {
-                            if (filterValue != '') {
-                                if($(this).attr(filter.child_attr).includes(filterValue)) {
+                if (filterValue.length == 0 || filterValue == "") {
+                    if (showElement.length == 0) {
+                        $(filterProperty.parent+' '+filterProperty.child).each(function() {
+                            showElement.push($(this));
+                        });
+                    } else {
+
+                    }
+                } else {
+                    if (showElement.length == 0) {
+                        $(filterProperty.parent+' '+filterProperty.child).each(function() {
+                            if (filter.type == 'type' || filter.type == 'select') {
+                                if (filterValue != '') {
+                                    if($(this).attr(filter.child_attr).includes(filterValue)) {
+                                        showElement.push($(this));
+                                    }
+                                } else {
                                     showElement.push($(this));
                                 }
-                            } else {
-                                showElement.push($(this));
+                            } else if (filter.type == 'radio') {
+                                if(filterValue.includes($(this).attr(filter.child_attr))) {
+                                    showElement.push($(this));
+                                }
+                            } else if (filter.type == 'check') {
+                                if(filterValue.includes($(this).attr(filter.child_attr))) {
+                                    showElement.push($(this));
+                                }
                             }
-                        } else if (filter.type == 'radio') {
-                            if(filterValue.includes($(this).attr(filter.child_attr))) {
-                                showElement.push($(this));
-                            }
-                        } else if (filter.type == 'check') {
-                            if(filterValue.includes($(this).attr(filter.child_attr))) {
-                                showElement.push($(this));
-                            }
-                        }
-                    });
-                } else {
-                    showElement = jQuery.grep(showElement, function(value) {
-                        // return value != removeItem;
-                        if (filter.type == 'type') {
-                            if (filterValue != '') {
-                                if(value.attr(filter.child_attr).includes(filterValue)) {
+                        });
+                    } else {
+                        showElement = jQuery.grep(showElement, function(value) {
+                            // return value != removeItem;
+                            if (filter.type == 'type' || filter.type == 'select') {
+                                if (filterValue != '') {
+                                    if(value.attr(filter.child_attr).includes(filterValue)) {
+                                        return value;
+                                    }
+                                } else {
                                     return value;
                                 }
-                            } else {
-                                return value;
+                            } else if (filter.type == 'radio') {
+                                if(filterValue.includes(value.attr(filter.child_attr))) {
+                                    return value;
+                                }
+                            } else if (filter.type == 'check') {
+                                if(filterValue.includes(value.attr(filter.child_attr))) {
+                                    return value;
+                                }
                             }
-                        } else if (filter.type == 'radio') {
-                            if(filterValue.includes(value.attr(filter.child_attr))) {
-                                return value;
-                            }
-                        } else if (filter.type == 'check') {
-                            if(filterValue.includes(value.attr(filter.child_attr))) {
-                                return value;
-                            }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         });
@@ -756,8 +808,16 @@ class Filter {
         let showIndex = [];
         showElement.forEach(function(el) {
             showIndex.push(el.index());
-            console.log(el.index() + ' - ' + el.attr('dritte-filter-color') + ' - ' + el.attr('dritte-filter-data'));
+            // console.log(el.index() + ' - ' + el.attr('dritte-filter-color') + ' - ' + el.attr('dritte-filter-data'));
         });
+
+        if (showIndex.length == 0) {
+            if ($('.no-data').length == 0) {
+                $(this.property.parent).append('<p class="no-data">No Record Found!</p>');
+            }
+        } else {
+            $(this.property.parent+' .no-data').remove();
+        }
 
         localStorage.setItem(this.property.name+'-showIndex', JSON.stringify(showIndex));
 
