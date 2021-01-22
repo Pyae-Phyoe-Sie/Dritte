@@ -185,7 +185,7 @@
                     total:          true,
                     type:           {
                         type:               'infinite-scroll', // 'page' | 'infinite-button' | 'infinite-scroll'
-                        animate:            'bounce-in', // 'fade-in' | 'slide-up' | 'slide-left' | 'slide-right' | 'bounce-in' | 'y-flip' | 'x-flip'
+                        animate:            'slide-left', // 'fade-in' | 'slide-up' | 'slide-left' | 'slide-right' | 'bounce-in' | 'y-flip' | 'x-flip'
                         childDefaultHeight: '100px', // if 'slide-up' | 'slide-left' need child height
                         scrollWorkOn:       'parent', // default window
                         image:              'https://www.bluechipexterminating.com/wp-content/uploads/2020/02/loading-gif-png-5.gif',
@@ -219,7 +219,7 @@
                     per_page:       7, // default 10
                     parent:         '.card-grid',
                     child:          '.card-item',
-                    total:          true,
+                    total:          false,
                     type:           {
                         type:               'page', // 'page' | 'infinite-button' | 'infinite-scroll'
                         animate:            'x-flip', // 'fade-in' | 'slide-up' | 'slide-left' | 'slide-right' | 'bounce-in' | 'y-flip' | 'x-flip'
@@ -244,7 +244,7 @@
             $('.card-grid').on('scroll', function() {
 
                 // check for infinite scroll
-                checkforInfiniteScroll($(this));
+                // checkforInfiniteScroll($(this));
 
                 // check for not view
                 checkViewWhenScroll();
