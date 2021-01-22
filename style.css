@@ -79,8 +79,16 @@ ul.paginate-pages p {
     cursor: pointer;
 }
 
+.filter-check>div {
+    position: relative;
+}
+
 .remove-text {
     display: none;
+    cursor: pointer;
+    top: 8px;
+    right: 10px;
+    position: absolute;
 }
 
 .filter-text-item:valid ~ .remove-text {
@@ -131,7 +139,48 @@ select {
     color: #666666;
 }
 
-/* li.active,
+.total-count {
+    text-align: right;
+    padding: 5px 8px;
+}
+
+/* fade in transition */
+.not-view.fade-in {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.in-view.fade-in {
+    opacity: 1;
+    transition: opacity 1s ease;
+}
+/* end fade in transition */
+
+/* slide up transition */
+.not-view.slide-up { opacity: 0; top: 150px; position: absolute; transition: top 1s ease, opacity 1s ease, position 1s ease; } .in-view.slide-up { opacity: 1; top: 0px; position: relative; transition: top 1s ease, opacity 1s ease, position 1s ease; }
+/* end slide up transition */
+
+/* y-flip transition */
+.not-view.y-flip { transform: rotateY(270deg);transition: transform 1s ease; } .in-view.y-flip { transform: rotateY(360deg);transition: transform 1s ease; }
+/* end y-flip transition */
+
+/* x-flip transition */
+.not-view.x-flip { transform: rotateX(270deg);transition: transform 1s ease; } .in-view.x-flip { transform: rotateX(360deg);transition: transform 1s ease; }
+/* end x-flip transition */
+
+/* slide-left transition */
+.not-view.slide-left { right: 100%; position: absolute; transition: right 1s ease, position 1s ease; } .in-view.slide-left { right: 0px; position: relative; transition: right 1s ease, position 1s ease; }
+/* end slide-left transition */
+
+/* slide-right transition */
+.not-view.slide-right { left: 100%; position: absolute; transition: left 1s ease, position 1s ease; } .in-view.slide-right { left: 0px; position: relative; transition: left 1s ease, position 1s ease; }
+/* end slide-right transition */
+
+/* bounce-in transition */
+.not-view.bounce-in { transform: scale(0); transition: transform 1s ease; } .in-view.bounce-in { transform: scale(1);transition: transform 1s ease; }
+/* bounce-in transition */
+
+li.active,
 li:hover {
     background-color: #3299ff !important;
     color: #fff !important;
@@ -140,4 +189,4 @@ li:hover {
 li.prev,
 li.next {
     color: #fff !important;
-} */
+}
