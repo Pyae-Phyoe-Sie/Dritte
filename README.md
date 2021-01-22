@@ -110,6 +110,7 @@ filter
 | child | your record class | required (work on this) |
 | total | boolean | not mandatory (default is false) |
 | childFilter | objects (if you want multifilter add two objects like upper) | required |
+| paginate | call paginate name (want to work together) | not mandatory |
 
 filter Type
 
